@@ -58,8 +58,7 @@ class SingupScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: TextField(
-                  keyboardType: TextInputType.number,
-                  obscureText: true,
+                  keyboardType: TextInputType.phone,
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                   decoration: InputDecoration(
                     enabledBorder: inputBorderStyle,
