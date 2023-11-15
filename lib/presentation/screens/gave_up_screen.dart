@@ -7,6 +7,8 @@ class GaveUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -50,7 +52,7 @@ class GaveUpScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 385,
+              height: height * 0.5,
               width: double.infinity,
               child: Stack(
                 children: [
@@ -122,15 +124,15 @@ class GaveUpScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              height: 56,
-              width: 320,
+              height: height > 56 ? 56 : height * 0.06,
+              width: width * 0.85,
               child: TextButton(
                 child: const Text(
                   'OK',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const HomeScreen(),

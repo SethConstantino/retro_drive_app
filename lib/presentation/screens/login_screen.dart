@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:retro_drive_app/presentation/screens/home_screen.dart';
 import 'package:retro_drive_app/presentation/screens/signup_screen.dart';
 
+import '../widgets/icon_button.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -13,6 +15,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -94,11 +98,11 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                height: 56,
-                width: 320,
+                height: height > 56 ? 56 : height * 0.06,
+                width: width * 0.85,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const HomeScreen(),
@@ -121,74 +125,17 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      Color.fromRGBO(64, 72, 191, 1),
-                      Color.fromRGBO(8, 102, 255, 1),
-                    ],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 15),
-                      color: Color.fromRGBO(20, 103, 204, 0.16),
-                      blurRadius: 30,
-                    ),
-                  ],
-                ),
-                height: 56,
-                width: 320,
-                child: TextButton.icon(
-                  icon: const Icon(
-                    Icons.facebook_outlined,
-                    color: Colors.white,
-                    size: 37,
-                  ),
-                  onPressed: () {},
-                  label: const Text(
-                    'Login with Facebook',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
+              const MyIconButton(
+                color: Color.fromRGBO(8, 102, 255, 1),
+                icon: Icons.facebook_outlined,
+                text: 'Login with Facebook',
               ),
               const SizedBox(height: 30),
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      Color.fromRGBO(64, 72, 191, 1),
-                      Color.fromRGBO(255, 255, 255, 1),
-                    ],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 15),
-                      color: Color.fromRGBO(20, 103, 204, 0.16),
-                      blurRadius: 30,
-                    ),
-                  ],
-                ),
-                height: 56,
-                width: 320,
-                child: TextButton.icon(
-                  icon: const Icon(
-                    Icons.g_mobiledata_rounded,
-                    color: Colors.white,
-                    size: 42,
-                  ),
-                  onPressed: () {},
-                  label: const Text(
-                    'Login with Facebook',
-                    style: TextStyle(color: Colors.black, fontSize: 16),
-                  ),
-                ),
+              const MyIconButton(
+                color: Color.fromRGBO(255, 255, 255, 1),
+                icon: Icons.g_mobiledata_rounded,
+                text: 'Login with Google',
+                textColor: 1,
               ),
               const SizedBox(height: 20),
               Padding(
@@ -201,7 +148,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const SingupScreen(),

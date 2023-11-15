@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:retro_drive_app/presentation/screens/gave_up_screen.dart';
 import 'package:retro_drive_app/presentation/screens/race_won_screen.dart';
+import 'package:retro_drive_app/presentation/widgets/icon_button.dart';
 
 class DrivingScreen extends StatelessWidget {
   const DrivingScreen({super.key});
@@ -13,14 +14,16 @@ class DrivingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(
-                height: 150,
-                child: Column(
+              SizedBox(
+                height: height * 0.19,
+                child: const Column(
                   children: [
                     SizedBox(height: 55),
                     Text(
@@ -84,54 +87,17 @@ class DrivingScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 90),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    gradient: LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [
-                        Color.fromRGBO(64, 72, 191, 1),
-                        Color.fromRGBO(195, 75, 75, 7),
-                      ],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: Offset(0, 15),
-                        color: Color.fromRGBO(20, 103, 204, 0.16),
-                        blurRadius: 30,
-                      ),
-                    ],
-                  ),
-                  height: 56,
-                  width: double.infinity,
-                  child: TextButton.icon(
-                    label: const Text(
-                      'I give up',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    icon: const Icon(
-                      Icons.sentiment_dissatisfied_outlined,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const GaveUpScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+              SizedBox(height: height * 0.1),
+              const MyIconButton(
+                icon: Icons.sentiment_dissatisfied_outlined,
+                color: Color.fromRGBO(195, 75, 75, 7),
+                text: 'I give up',
+                nextPage: GaveUpScreen(),
               ),
               const SizedBox(height: 5),
               TextButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const RaceWonScreen(),

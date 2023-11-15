@@ -8,6 +8,9 @@ class StartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Scaffold(
         body: Center(
@@ -16,7 +19,7 @@ class StartScreen extends StatelessWidget {
               Stack(
                 children: [
                   Container(
-                    height: 600,
+                    height: height * 0.78,
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       boxShadow: [
@@ -40,11 +43,11 @@ class StartScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Center(
+                  Center(
                     child: Column(
                       children: [
-                        SizedBox(height: 100),
-                        Padding(
+                        SizedBox(height: height * 0.15),
+                        const Padding(
                           padding: EdgeInsets.all(30),
                           child: Image(
                             image: AssetImage('assets/retro_drive.jpeg'),
@@ -55,22 +58,21 @@ class StartScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 60,
-              ),
+              SizedBox(height: height * 0.08),
               Container(
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   color: Color.fromRGBO(81, 75, 195, 1),
                 ),
-                height: 56,
-                width: 340,
+                //height: 56,
+                height: height > 56 ? 56 : height * 0.06,
+                width: width * 0.90,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
+                        builder: (context) => LoginScreen(),
                       ),
                     );
                   },

@@ -26,7 +26,7 @@ class BackButtonScreen extends StatelessWidget {
                 child: Center(
                   child: IconButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => nextPageName,
