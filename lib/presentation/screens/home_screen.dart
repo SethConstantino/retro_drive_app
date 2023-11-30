@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:retro_drive_app/presentation/screens/profile_screen.dart';
-import 'package:retro_drive_app/presentation/screens/settings_screen.dart';
-import 'package:retro_drive_app/presentation/screens/start_screen.dart';
-import 'package:retro_drive_app/presentation/screens/time_setting.dart';
-import 'package:retro_drive_app/presentation/widgets/collection.dart';
+import 'package:provider/provider.dart';
+import 'package:retro_drive_app/presentation/screens/loading_screen.dart';
+import 'package:retro_drive_app/presentation/widgets/collection_images.dart';
+import 'package:retro_drive_app/services/collection_service.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -25,7 +24,7 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(
                         height: 50,
                       ),
-                      HeaderMenu(),
+                      _HeaderMenu(),
                     ],
                   ),
                 ),
@@ -41,25 +40,25 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 50),
               const _ItemSideMenu(
                 icon: Icons.home_filled,
-                nextPage: HomeScreen(),
+                nextPage: 'homeScreen',
                 text: 'Home',
               ),
               const SizedBox(height: 40),
               const _ItemSideMenu(
                 icon: Icons.person_outline_rounded,
-                nextPage: ProfileScreen(),
+                nextPage: 'profileScreen',
                 text: 'Profile',
               ),
               const SizedBox(height: 40),
               const _ItemSideMenu(
                 icon: Icons.settings,
-                nextPage: SettingsScreen(),
+                nextPage: 'settingsScreen',
                 text: 'Settings',
               ),
               const SizedBox(height: 40),
               const _ItemSideMenu(
                 icon: Icons.logout_rounded,
-                nextPage: StartScreen(),
+                nextPage: 'startScreen',
                 text: 'Logout',
               ),
             ],
@@ -117,12 +116,7 @@ class _HomeBody extends StatelessWidget {
           width: width * 0.85,
           child: TextButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const TimeSettingScreen(),
-                ),
-              );
+              Navigator.pushReplacementNamed(context, 'timeSettingScreen');
             },
             child: const Text(
               'Start driving',
@@ -142,15 +136,21 @@ class _HomeMainBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final collectionService = Provider.of<CollectionService>(context);
+
+    //if (collectionService.isLoading) return LoadingScreen();
+
     return SizedBox(
       height: height * 0.5,
       width: double.infinity,
       child: Stack(
         children: [
           ListView.builder(
-            itemCount: 4,
+            itemCount: collectionService.collections.length,
             itemBuilder: (context, index) {
-              return const MyCollection();
+              return MyCollection(
+                collection: collectionService.collections[index],
+              );
             },
           ),
           Align(
@@ -258,7 +258,7 @@ class _HomeTopStack extends StatelessWidget {
 class _ItemSideMenu extends StatelessWidget {
   final IconData icon;
   final String text;
-  final StatelessWidget nextPage;
+  final String nextPage;
 
   const _ItemSideMenu({
     required this.icon,
@@ -288,12 +288,7 @@ class _ItemSideMenu extends StatelessWidget {
             size: 37,
           ),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => nextPage,
-              ),
-            );
+            Navigator.pushReplacementNamed(context, nextPage);
           },
           label: Text(
             text,
@@ -305,8 +300,8 @@ class _ItemSideMenu extends StatelessWidget {
   }
 }
 
-class HeaderMenu extends StatelessWidget {
-  const HeaderMenu({super.key});
+class _HeaderMenu extends StatelessWidget {
+  const _HeaderMenu({super.key});
 
   @override
   Widget build(BuildContext context) {

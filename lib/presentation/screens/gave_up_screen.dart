@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:retro_drive_app/presentation/screens/home_screen.dart';
-import 'package:retro_drive_app/presentation/widgets/collection.dart';
+import 'package:retro_drive_app/presentation/screens/loading_screen.dart';
+import 'package:retro_drive_app/presentation/widgets/collection_images.dart';
 
 class GaveUpScreen extends StatelessWidget {
   const GaveUpScreen({super.key});
@@ -59,7 +60,8 @@ class GaveUpScreen extends StatelessWidget {
                   ListView.builder(
                     itemCount: 4,
                     itemBuilder: (context, index) {
-                      return const MyCollection();
+                      //return const MyCollection();
+                      return LoadingScreen();
                     },
                   ),
                   Align(

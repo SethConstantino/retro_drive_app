@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:retro_drive_app/presentation/screens/home_screen.dart';
-import 'package:retro_drive_app/presentation/screens/signup_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:retro_drive_app/providers/login_form_provider.dart';
 
 import '../widgets/icon_button.dart';
 
@@ -38,81 +38,13 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 18),
-                  //obscureText: true,
-                  decoration: InputDecoration(
-                    enabledBorder: inputBorderStyle,
-                    focusedBorder: inputBorderStyle,
-                    //labelText: 'Password',
-                    prefixIcon: Icon(
-                      Icons.person_outline_rounded,
-                      size: 35,
-                      color: myColor,
-                    ),
-                    hintText: 'Email',
-                    hintStyle: const TextStyle(
-                      color: Colors.white54,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: TextField(
-                  obscureText: true,
-                  style: const TextStyle(color: Colors.white, fontSize: 18),
-                  decoration: InputDecoration(
-                    enabledBorder: inputBorderStyle,
-                    focusedBorder: inputBorderStyle,
-                    //labelText: 'Password',
-                    prefixIcon: Icon(
-                      Icons.password_outlined,
-                      size: 35,
-                      color: myColor,
-                    ),
-                    hintText: 'Password',
-                    hintStyle: const TextStyle(
-                      color: Colors.white54,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  color: Color.fromRGBO(81, 75, 195, 1),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 15),
-                      color: Color.fromRGBO(20, 103, 204, 0.16),
-                      blurRadius: 30,
-                    ),
-                  ],
-                ),
-                height: height > 56 ? 56 : height * 0.06,
-                width: width * 0.85,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+              ChangeNotifierProvider(
+                create: (context) => LoginFormProvider(),
+                child: _LoginForm(
+                  inputBorderStyle: inputBorderStyle,
+                  myColor: myColor,
+                  height: height,
+                  width: width,
                 ),
               ),
               const Padding(
@@ -148,12 +80,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SingupScreen(),
-                          ),
-                        );
+                        Navigator.pushReplacementNamed(context, 'singupScreen');
                       },
                       child: const Text(
                         'Signup',
@@ -166,6 +93,126 @@ class LoginScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _LoginForm extends StatelessWidget {
+  const _LoginForm({
+    required this.inputBorderStyle,
+    required this.myColor,
+    required this.height,
+    required this.width,
+  });
+
+  final UnderlineInputBorder inputBorderStyle;
+  final Color myColor;
+  final double height;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    final loginForm = Provider.of<LoginFormProvider>(context);
+    return Form(
+      key: loginForm.formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: TextFormField(
+              autocorrect: false,
+              keyboardType: TextInputType.emailAddress,
+              style: const TextStyle(color: Colors.white, fontSize: 18),
+              onChanged: (value) => loginForm.email = value,
+              validator: (value) {
+                String pattern =
+                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                RegExp regExp = RegExp(pattern);
+                return regExp.hasMatch(value ?? '')
+                    ? null
+                    : 'This email isn\'t valid';
+              },
+              decoration: InputDecoration(
+                enabledBorder: inputBorderStyle,
+                focusedBorder: inputBorderStyle,
+                prefixIcon: Icon(
+                  Icons.person_outline_rounded,
+                  size: 35,
+                  color: myColor,
+                ),
+                hintText: 'Email',
+                hintStyle: const TextStyle(
+                  color: Colors.white54,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 40),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: TextFormField(
+              autocorrect: false,
+              obscureText: true,
+              keyboardType: TextInputType.emailAddress,
+              style: const TextStyle(color: Colors.white, fontSize: 18),
+              decoration: InputDecoration(
+                enabledBorder: inputBorderStyle,
+                focusedBorder: inputBorderStyle,
+                prefixIcon: Icon(
+                  Icons.password_outlined,
+                  size: 35,
+                  color: myColor,
+                ),
+                hintText: 'Password',
+                hintStyle: const TextStyle(
+                  color: Colors.white54,
+                  fontSize: 20,
+                ),
+              ),
+              onChanged: (value) => loginForm.password = value,
+              validator: (value) {
+                if (value != null && value.length >= 6) return null;
+                return 'The password must have al least 6 characters';
+              },
+            ),
+          ),
+          const SizedBox(height: 60),
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              color: Color.fromRGBO(81, 75, 195, 1),
+              boxShadow: [
+                BoxShadow(
+                  offset: Offset(0, 15),
+                  color: Color.fromRGBO(20, 103, 204, 0.16),
+                  blurRadius: 30,
+                ),
+              ],
+            ),
+            height: height > 56 ? 56 : height * 0.06,
+            width: width * 0.85,
+            child: TextButton(
+              onPressed: loginForm.isLoading
+                  ? null
+                  : () async {
+                      FocusScope.of(context).unfocus();
+                      if (!loginForm.isValidForm()) return;
+                      loginForm.isLoading = true;
+                      await Future.delayed(const Duration(seconds: 2));
+                      loginForm.isLoading = false;
+                      // ignore: use_build_context_synchronously
+                      Navigator.pushReplacementNamed(context, 'homeScreen');
+                    },
+              child: const Text(
+                'Login',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

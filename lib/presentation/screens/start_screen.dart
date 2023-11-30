@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:retro_drive_app/presentation/screens/login_screen.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -69,12 +68,7 @@ class StartScreen extends StatelessWidget {
                 width: width * 0.90,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
-                      ),
-                    );
+                    Navigator.pushReplacementNamed(context, 'loginScreen');
                   },
                   child: const Text(
                     'Get started',

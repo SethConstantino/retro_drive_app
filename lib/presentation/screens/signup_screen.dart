@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:retro_drive_app/presentation/screens/home_screen.dart';
-import 'package:retro_drive_app/presentation/screens/login_screen.dart';
 
 import '../widgets/icon_button.dart';
 
@@ -127,7 +125,7 @@ class SingupScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 60,
+                height: 30,
               ),
               Container(
                 decoration: const BoxDecoration(
@@ -145,12 +143,7 @@ class SingupScreen extends StatelessWidget {
                 width: width * 0.85,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
-                    );
+                    Navigator.pushReplacementNamed(context, 'homeScreen');
                   },
                   child: const Text(
                     'Accept & Continue',
@@ -211,12 +204,7 @@ class SingupScreen extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
-                          ),
-                        );
+                        Navigator.pushReplacementNamed(context, 'loginScreen');
                       },
                       child: const Text(
                         'Login',

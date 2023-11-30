@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:retro_drive_app/presentation/screens/gave_up_screen.dart';
 import 'package:retro_drive_app/presentation/screens/race_won_screen.dart';
-import 'package:retro_drive_app/presentation/widgets/icon_button.dart';
+import 'dart:async';
 
 class DrivingScreen extends StatelessWidget {
-  const DrivingScreen({super.key});
+  final TextEditingController minutesInput;
+  final TextEditingController hoursInput;
+
+  const DrivingScreen({
+    super.key,
+    required this.hoursInput,
+    required this.minutesInput,
+  });
 
   final UnderlineInputBorder inputBorderStyle = const UnderlineInputBorder(
     borderSide: BorderSide(color: Colors.transparent),
@@ -14,7 +21,7 @@ class DrivingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
@@ -37,31 +44,19 @@ class DrivingScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
+              /*SizedBox(
+                width: width * 0.8,
                 height: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    NumberCell(num: '0'),
-                    const SizedBox(width: 10),
-                    NumberCell(num: '0'),
-                    const SizedBox(width: 10),
-                    const Text(
-                      ':',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    NumberCell(num: '0'),
-                    const SizedBox(width: 10),
-                    NumberCell(num: '0'),
-                    const SizedBox(width: 10),
-                  ],
+                child: _NumberCell(
+                  hoursInput: hoursInput,
+                  minutesInput: minutesInput,
+                  width: width,
                 ),
+              ),*/
+              _NumberCell(
+                hoursInput: hoursInput,
+                minutesInput: minutesInput,
+                width: width,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -88,27 +83,50 @@ class DrivingScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: height * 0.1),
-              const MyIconButton(
-                icon: Icons.sentiment_dissatisfied_outlined,
-                color: Color.fromRGBO(195, 75, 75, 7),
-                text: 'I give up',
-                nextPage: GaveUpScreen(),
-              ),
-              const SizedBox(height: 5),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const RaceWonScreen(),
+              Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Color.fromRGBO(64, 72, 191, 1),
+                      Color.fromRGBO(195, 75, 75, 7),
+                    ],
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 15),
+                      color: Color.fromRGBO(20, 103, 204, 0.16),
+                      blurRadius: 30,
                     ),
-                  );
-                },
-                child: const Text(
-                  'Ver cuando ganas',
-                  style: TextStyle(color: Colors.white),
+                  ],
                 ),
-              )
+                height: height > 56 ? 56 : height * 0.06,
+                width: width * 0.85,
+                child: TextButton.icon(
+                  icon: const Icon(
+                    Icons.sentiment_dissatisfied_outlined,
+                    color: Colors.white,
+                    size: 37,
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const GaveUpScreen(),
+                      ),
+                    );
+                  },
+                  label: const Text(
+                    'I give up',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -117,27 +135,117 @@ class DrivingScreen extends StatelessWidget {
   }
 }
 
-class NumberCell extends StatelessWidget {
-  final String num;
+class _NumberCell extends StatelessWidget {
+  final double width;
+  final TextEditingController minutesInput;
+  final TextEditingController hoursInput;
 
-  NumberCell({required this.num});
+  const _NumberCell({
+    required this.hoursInput,
+    required this.minutesInput,
+    required this.width,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      width: 40,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        color: const Color.fromRGBO(88, 81, 123, 1),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Text(
-        num,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 30,
+    return SizedBox(
+      width: width * 0.8,
+      height: 50,
+      child: Container(
+        alignment: Alignment.center,
+        width: width * 0.75,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          color: const Color.fromRGBO(88, 81, 123, 1),
+          borderRadius: BorderRadius.circular(15),
         ),
+        child: TextClocTimer(
+          hoursInput: hoursInput,
+          minutesInput: minutesInput,
+        ),
+      ),
+    );
+  }
+}
+
+class TextClocTimer extends StatefulWidget {
+  final TextEditingController minutesInput;
+  final TextEditingController hoursInput;
+
+  const TextClocTimer({
+    required this.minutesInput,
+    required this.hoursInput,
+  });
+  @override
+  State<TextClocTimer> createState() => _TextClocTimerState();
+}
+
+class _TextClocTimerState extends State<TextClocTimer> {
+  int minutes = 0, hours = 0, seconds = 0, secs = 60;
+  String printText = '';
+  bool stop = false;
+
+  void stopTimer() {
+    stop = true;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //print('text hrs ${widget.hoursInput.text}');
+    minutes = widget.minutesInput.text.isEmpty
+        ? 0
+        : int.parse(widget.minutesInput.text);
+    hours =
+        widget.hoursInput.text.isEmpty ? 0 : int.parse(widget.hoursInput.text);
+
+    if (hours != 0) seconds += hours * 3600;
+    seconds += minutes * 60;
+
+    setState(() {
+      printText = '';
+    });
+
+    Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        if (seconds == 0) {
+          timer.cancel();
+          setState(() {
+            printText = '$hours : $minutes : $secs';
+          });
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const RaceWonScreen(),
+            ),
+          );
+        } else {
+          seconds--;
+          secs--;
+          if (secs == 0) {
+            secs = (seconds == 0) ? 0 : 60;
+            minutes--;
+            if (hours != 0) {
+              hours--;
+              minutes = 60;
+            }
+          }
+          setState(() {
+            printText = '$hours : ${minutes == 0 ? 0 : minutes - 1} : $secs';
+          });
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      printText,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 30,
       ),
     );
   }
