@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         colorSchemeSeed: const Color.fromRGBO(13, 23, 36, 1),
         scaffoldBackgroundColor: const Color(0xFF0D1724),
       ),
-      initialRoute: 'gaveUpScreen',
+      initialRoute: 'startScreen',
       routes: {
         'startScreen': (context) => const StartScreen(),
         'loginScreen': (context) => const LoginScreen(),

@@ -19,6 +19,7 @@ class DrivingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //final VoidCallback stopTimerCallback;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -42,10 +43,28 @@ class DrivingScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              _NumberCell(
+              /*_NumberCell(
                 hoursInput: hoursInput,
                 minutesInput: minutesInput,
                 width: width,
+              ),*/
+              SizedBox(
+                width: width * 0.8,
+                height: 50,
+                child: Container(
+                  alignment: Alignment.center,
+                  width: width * 0.75,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(88, 81, 123, 1),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: TextClocTimerAsync(
+                    hoursInput: hoursInput,
+                    minutesInput: minutesInput,
+                    stopButton: false,
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -100,7 +119,19 @@ class DrivingScreen extends StatelessWidget {
                     size: 37,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, 'gaveUpScreen');
+                    //Navigator.pushReplacementNamed(context, 'gaveUpScreen');
+                    hoursInput.clear();
+                    minutesInput.clear();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TextClocTimerAsync(
+                          minutesInput: minutesInput,
+                          hoursInput: hoursInput,
+                          stopButton: true,
+                        ),
+                      ),
+                    );
                   },
                   label: const Text(
                     'I give up',
@@ -119,7 +150,7 @@ class DrivingScreen extends StatelessWidget {
   }
 }
 
-class _NumberCell extends StatelessWidget {
+/*class _NumberCell extends StatelessWidget {
   final double width;
   final TextEditingController minutesInput;
   final TextEditingController hoursInput;
@@ -150,9 +181,9 @@ class _NumberCell extends StatelessWidget {
       ),
     );
   }
-}
+}*/
 
-class TextClocTimer extends StatefulWidget {
+/*class TextClocTimer extends StatefulWidget {
   final TextEditingController minutesInput;
   final TextEditingController hoursInput;
 
@@ -176,7 +207,7 @@ class _TextClocTimerState extends State<TextClocTimer> {
   @override
   void initState() {
     super.initState();
-    //print('text hrs ${widget.hoursInput.text}');
+//print('text hrs ${widget.hoursInput.text}');
     minutes = widget.minutesInput.text.isEmpty
         ? 0
         : int.parse(widget.minutesInput.text);
@@ -194,6 +225,92 @@ class _TextClocTimerState extends State<TextClocTimer> {
       const Duration(seconds: 1),
       (timer) {
         if (seconds == 0) {
+          timer.cancel();
+          setState(() {
+            printText = '$hours : $minutes : $secs';
+          });
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const RaceWonScreen(),
+            ),
+          );
+        } else {
+          seconds--;
+          secs--;
+          if (secs == 0) {
+            secs = (seconds == 0) ? 0 : 60;
+            minutes--;
+            if (hours != 0) {
+              hours--;
+              minutes = 60;
+            }
+          }
+          setState(() {
+            printText = '$hours : ${minutes == 0 ? 0 : minutes - 1} : $secs';
+          });
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      printText,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 30,
+      ),
+    );
+  }
+}*/
+class TextClocTimerAsync extends StatefulWidget {
+  final TextEditingController minutesInput;
+  final TextEditingController hoursInput;
+  final bool stopButton;
+
+  const TextClocTimerAsync({
+    super.key,
+    required this.minutesInput,
+    required this.hoursInput,
+    required this.stopButton,
+  });
+
+  @override
+  _TextClocTimerAsyncState createState() => _TextClocTimerAsyncState();
+}
+
+class _TextClocTimerAsyncState extends State<TextClocTimerAsync> {
+  int minutes = 0, hours = 0, seconds = 0, secs = 60;
+  String printText = '';
+  bool stop = false;
+
+  @override
+  void initState() {
+    super.initState();
+    minutes = widget.minutesInput.text.isEmpty
+        ? 0
+        : int.parse(widget.minutesInput.text);
+    hours =
+        widget.hoursInput.text.isEmpty ? 0 : int.parse(widget.hoursInput.text);
+
+    if (hours != 0) seconds += hours * 3600;
+    seconds += minutes * 60;
+    stop = widget.stopButton;
+
+    _loadAsyncData();
+  }
+
+  Future<void> _loadAsyncData() async {
+    await Future.delayed(Duration(seconds: 1));
+    Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        if (stop) {
+          timer.cancel();
+          Navigator.pushReplacementNamed(context, 'gaveUpScreen');
+        } else if (seconds == 0) {
           timer.cancel();
           setState(() {
             printText = '$hours : $minutes : $secs';
