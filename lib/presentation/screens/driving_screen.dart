@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:retro_drive_app/presentation/screens/gave_up_screen.dart';
-import 'package:retro_drive_app/presentation/screens/race_won_screen.dart';
 import 'dart:async';
 
 class DrivingScreen extends StatelessWidget {
@@ -44,15 +42,6 @@ class DrivingScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              /*SizedBox(
-                width: width * 0.8,
-                height: 50,
-                child: _NumberCell(
-                  hoursInput: hoursInput,
-                  minutesInput: minutesInput,
-                  width: width,
-                ),
-              ),*/
               _NumberCell(
                 hoursInput: hoursInput,
                 minutesInput: minutesInput,
@@ -111,12 +100,7 @@ class DrivingScreen extends StatelessWidget {
                     size: 37,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const GaveUpScreen(),
-                      ),
-                    );
+                    Navigator.pushReplacementNamed(context, 'gaveUpScreen');
                   },
                   label: const Text(
                     'I give up',
@@ -214,12 +198,7 @@ class _TextClocTimerState extends State<TextClocTimer> {
           setState(() {
             printText = '$hours : $minutes : $secs';
           });
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const RaceWonScreen(),
-            ),
-          );
+          Navigator.pushReplacementNamed(context, 'raceWonScreen');
         } else {
           seconds--;
           secs--;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:retro_drive_app/presentation/screens/home_screen.dart';
-import 'package:retro_drive_app/presentation/screens/loading_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:retro_drive_app/presentation/widgets/collection_images.dart';
+
+import '../../services/collection_service.dart';
 
 class RaceWonScreen extends StatelessWidget {
   const RaceWonScreen({super.key});
@@ -10,6 +11,9 @@ class RaceWonScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
+    final collectionService = Provider.of<CollectionService>(context);
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -68,10 +72,15 @@ class RaceWonScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   ListView.builder(
-                    itemCount: 4,
+                    itemCount: collectionService.collections.length,
                     itemBuilder: (context, index) {
-                      //return const MyCollection();
-                      return LoadingScreen();
+                      return Visibility(
+                        visible:
+                            (collectionService.collections[index].visible == 3),
+                        child: MyCollection(
+                          collection: collectionService.collections[index],
+                        ),
+                      );
                     },
                   ),
                   Align(
@@ -144,12 +153,15 @@ class RaceWonScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomeScreen(),
-                    ),
-                  );
+                  for (int i = 0;
+                      i < collectionService.collections.length;
+                      i++) {
+                    if (collectionService.collections[i].visible == 3) {
+                      collectionService
+                          .updateCollection(collectionService.collections[i]);
+                    }
+                  }
+                  Navigator.pushReplacementNamed(context, 'homeScreen');
                 },
               ),
             ),

@@ -8,9 +8,9 @@ class MyCollection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('\ntxt coll name: ${collection.name}');
+    /*print('\ntxt coll name: ${collection.name}');
     print('txt coll img0: ${collection.images[0]}');
-    print('txt coll img1: ${collection.images.length}');
+    print('txt coll img1: ${collection.images.length}');*/
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: Container(
@@ -39,28 +39,35 @@ class MyCollection extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  const SizedBox(width: 10),
-                  Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color.fromRGBO(135, 67, 255, 1),
-                          Color.fromRGBO(65, 54, 241, 1),
-                        ],
-                      ),
+                  for (int i = 0; i < collection.images.length; i++)
+                    Row(
+                      children: [
+                        const SizedBox(width: 10),
+                        Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromRGBO(135, 67, 255, 1),
+                                Color.fromRGBO(65, 54, 241, 1),
+                              ],
+                            ),
+                          ),
+                          height: 120,
+                          width: 120,
+                          child: Center(
+                            child: Image(
+                              width: 90,
+                              //image: AssetImage('assets/lsd_1.jpeg'),
+                              image: NetworkImage(
+                                  collection.images[i]!.toString()),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    height: 120,
-                    width: 120,
-                    child: const Center(
-                      child: Image(
-                        width: 90,
-                        image: AssetImage('assets/lsd_1.jpeg'),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),

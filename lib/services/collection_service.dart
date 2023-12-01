@@ -41,6 +41,9 @@ class CollectionService extends ChangeNotifier {
 
   //método que hace update
   Future<String> updateCollection(Collection collection) async {
+    if (collection.visible == 3) {
+      collection.visible = 1;
+    }
     final url = Uri.https(_baseUrl, 'collections/${collection.id}.json');
     final resp = await http.put(url, body: collection.toJson());
     final decodedData = resp.body;

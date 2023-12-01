@@ -3,7 +3,7 @@ import 'dart:convert';
 class Collection {
   String? id;
   String name;
-  bool visible;
+  int visible;
   Map<int, String> images;
 
   Collection({
@@ -25,6 +25,9 @@ class Collection {
             json["images"].asMap().map((k, v) => MapEntry(k, v))),
       );
 
-  Map<String, dynamic> toMap() =>
-      {"name": name, "visible": visible, "images": images};
+  Map<String, dynamic> toMap() => {
+        "name": name,
+        "visible": visible,
+        "images": images.map((k, v) => MapEntry(k.toString(), v)),
+      };
 }

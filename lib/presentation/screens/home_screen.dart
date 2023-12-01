@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:retro_drive_app/presentation/screens/loading_screen.dart';
+//import 'package:retro_drive_app/presentation/screens/loading_screen.dart';
 import 'package:retro_drive_app/presentation/widgets/collection_images.dart';
 import 'package:retro_drive_app/services/collection_service.dart';
 
@@ -129,6 +129,7 @@ class _HomeBody extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class _HomeMainBody extends StatelessWidget {
   const _HomeMainBody({required this.height});
 
@@ -137,6 +138,7 @@ class _HomeMainBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final collectionService = Provider.of<CollectionService>(context);
+    //print('txt ${collectionService.collections[0].name}');
 
     //if (collectionService.isLoading) return LoadingScreen();
 
@@ -148,8 +150,11 @@ class _HomeMainBody extends StatelessWidget {
           ListView.builder(
             itemCount: collectionService.collections.length,
             itemBuilder: (context, index) {
-              return MyCollection(
-                collection: collectionService.collections[index],
+              return Visibility(
+                visible: (collectionService.collections[index].visible == 1),
+                child: MyCollection(
+                  collection: collectionService.collections[index],
+                ),
               );
             },
           ),

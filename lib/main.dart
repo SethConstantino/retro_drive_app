@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:retro_drive_app/presentation/screens/gave_up_screen.dart';
 import 'package:retro_drive_app/presentation/screens/home_screen.dart';
 import 'package:retro_drive_app/presentation/screens/login_screen.dart';
 import 'package:retro_drive_app/presentation/screens/profile_screen.dart';
+import 'package:retro_drive_app/presentation/screens/race_won_screen.dart';
 import 'package:retro_drive_app/presentation/screens/settings_screen.dart';
 import 'package:retro_drive_app/presentation/screens/signup_screen.dart';
 import 'package:retro_drive_app/presentation/screens/start_screen.dart';
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
         colorSchemeSeed: const Color.fromRGBO(13, 23, 36, 1),
         scaffoldBackgroundColor: const Color(0xFF0D1724),
       ),
-      initialRoute: 'homeScreen',
+      initialRoute: 'gaveUpScreen',
       routes: {
         'startScreen': (context) => const StartScreen(),
         'loginScreen': (context) => const LoginScreen(),
@@ -47,6 +49,8 @@ class MyApp extends StatelessWidget {
         'profileScreen': (context) => const ProfileScreen(),
         'settingsScreen': (context) => const SettingsScreen(),
         'timeSettingScreen': (context) => const TimeSettingScreen(),
+        'gaveUpScreen': (context) => const GaveUpScreen(),
+        'raceWonScreen': (context) => const RaceWonScreen(),
       },
     );
   }
